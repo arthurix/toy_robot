@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+require_relative 'robot'
+
+#require "pry"
+#Pry.start
+
+require 'irb'
+IRB.start
