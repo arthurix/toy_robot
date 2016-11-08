@@ -1,14 +1,17 @@
+require 'pry'
+
 require_relative 'robot/table'
+require_relative 'robot/position'
 require_relative 'robot/command'
 
 module Robot
   extend module_function
-
-  def table
-    @table ||= Table.new(5, 5)
+  
+  def command(option)
+    @command ||= Command.new(option)
   end
 
-  def command(option)
-    @command ||= Command.new(option).execute
+  def move
+    command.execute
   end
 end

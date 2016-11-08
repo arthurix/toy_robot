@@ -1,6 +1,7 @@
+require_relative 'position'
+require_relative 'direction'
 require_relative 'command/base'
 require_relative 'command/place'
-require_relative 'command/movements'
 
 module Robot
   class Command
@@ -8,7 +9,7 @@ module Robot
       @command = command
     end
 
-    def execute
+    def prepare
       dispatch(name)
     end
 
@@ -16,11 +17,27 @@ module Robot
       options[1]
     end
 
+    def position
+      @position ||= Position.new(options[2].to_i, options[3].to_i)
+    end
+
+    def direction
+      @direction ||= Direction.new(options[4])
+    end
+
+    def table
+      @table ||= Table.new(5, 5)
+    end
+
+    def move
+      prepare.execute
+    end
+
     private
 
     def dispatch(name)
       clazz = Robot::Command.const_get("#{name.to_s.capitalize}")
-      clazz.new(options).execute
+      clazz.new(table, position, direction)
     end
 
     def options
