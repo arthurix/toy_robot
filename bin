@@ -1,10 +1,20 @@
 #!/usr/bin/env ruby
 
 require_relative 'robot'
+require 'pry'
 
-#require "pry"
-#Pry.start
+robot   = Robot.new
+table   = Table.new(5, 5)
+command = Command.new(robot, table)
 
-require 'irb'
-IRB.start
+puts "\e[32m ==========================\e[0m"
+puts "\e[32m| The Toy Robot Simulator! | \e[0m"
+puts "\e[32m ==========================\e[0m"
+puts 'Enter a command or quit to exit: '
 
+loop do
+  input = STDIN.gets
+  break if input =~ /^QUIT$/i
+  cmd = command.dispatch(input)
+  cmd.execute unless cmd.nil?
+end
