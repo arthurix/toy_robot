@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
-require_relative 'robot'
-require 'pry'
+require_relative '../robot'
 
 robot   = Robot.new
 table   = Table.new(5, 5)
