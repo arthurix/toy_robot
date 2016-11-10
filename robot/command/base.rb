@@ -1,13 +1,7 @@
-module Robot
-  class Command
-    class Base
-      attr_accessor :position, :direction
-
-      def initialize(table, position, direction)
-        @position = position
-        @direction = direction
-        @table = table
-      end
-    end
+class Base
+  def initialize(robot, table, position)
+    @robot = robot
+    @table = table
+    @position = position
   end
 end
