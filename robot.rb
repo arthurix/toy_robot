@@ -1,4 +1,4 @@
-require_relative 'robot/command'
-require_relative 'robot/table'
-require_relative 'robot/robot'
-require_relative 'robot/position'
+require_relative 'lib/command'
+require_relative 'lib/table'
+require_relative 'lib/robot'
+require_relative 'lib/position'
