@@ -1,47 +1,38 @@
-require_relative 'position'
-require_relative 'direction'
 require_relative 'command/base'
+require_relative 'command/move'
+require_relative 'command/left'
 require_relative 'command/place'
+require_relative 'command/right'
+require_relative 'command/report'
 
-module Robot
-  class Command
-    def initialize(command)
-      @command = command
-    end
+class Command
+  def initialize(robot, table)
+    @robot = robot
+    @table = table
+  end
 
-    def prepare
-      dispatch(name)
-    end
+  def dispatch(input)
+    input = parse(input)
+    clazz = Robot.const_get(input[:command].to_s.capitalize)
+    clazz.new(@robot,
+              @table,
+              Position.new(input[:x], input[:y], input[:direction]))
+  end
 
-    def name
-      options[1]
-    end
+  def parse(input)
+    input = input.match(/(.*) (\d)\,(\d),(.*)|(.*)/)
+    input = { command: input[1] || input[5],
+              x: input[2].to_i,
+              y: input[3].to_i,
+              direction: input[4] || input[5] }
+    raise ArgumentError, "\e[31mInvalid Command\e[0m" unless input[:command] =~
+                                                  valid_commands
+    input
+  end
 
-    def position
-      @position ||= Position.new(options[2].to_i, options[3].to_i)
-    end
+  private
 
-    def direction
-      @direction ||= Direction.new(options[4])
-    end
-
-    def table
-      @table ||= Table.new(5, 5)
-    end
-
-    def move
-      prepare.execute
-    end
-
-    private
-
-    def dispatch(name)
-      clazz = Robot::Command.const_get("#{name.to_s.capitalize}")
-      clazz.new(table, position, direction)
-    end
-
-    def options
-      @command.match(/(.*) (\d)\,(\d),(.*)|(.*)/)
-    end
+  def valid_commands
+    /^PLACE|MOVE|LEFT|RIGHT|REPORT$/
   end
 end
